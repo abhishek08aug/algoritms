@@ -47,15 +47,19 @@ public class ZeroOneKnapsack {
     }
 
     private static int _getMaximumProfitMemoized(int [] value, int [] weight, int n, int knapsackCapacity, int [][] table) {
+        if(knapsackCapacity == 0 || n == 0) {
+            return 0;
+        }
+
         if(table[n][knapsackCapacity] != -1) {
             return table[n][knapsackCapacity];
         }
 
         if(weight[n-1] > knapsackCapacity) {
-            table[n][knapsackCapacity] = getMaximumProfitRecursive(value, weight, n-1, knapsackCapacity);
+            table[n][knapsackCapacity] = _getMaximumProfitMemoized(value, weight, n-1, knapsackCapacity, table);
             return table[n][knapsackCapacity];
         }
-        table[n][knapsackCapacity] = Math.max(value[n-1] + getMaximumProfitRecursive(value, weight, n-1, knapsackCapacity-weight[n-1]), getMaximumProfitRecursive(value, weight, n-1, knapsackCapacity));
+        table[n][knapsackCapacity] = Math.max(value[n-1] + _getMaximumProfitMemoized(value, weight, n-1, knapsackCapacity-weight[n-1], table), _getMaximumProfitMemoized(value, weight, n-1, knapsackCapacity, table));
         return table[n][knapsackCapacity];
     }
 
